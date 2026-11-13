@@ -38,6 +38,8 @@ def save_html_report(results, output_path="report.html", refresh_seconds=None):
         idle = item.get("idle_seconds")
         rx = item.get("rx_bytes")
         tx = item.get("tx_bytes")
+        connections = item.get("connections_count")
+        connections_text = str(connections) if connections is not None else "-"
 
         idle_text = str(idle) if idle is not None else "-"
         rx_text = str(rx) if rx is not None else "-"
@@ -57,7 +59,7 @@ def save_html_report(results, output_path="report.html", refresh_seconds=None):
                 <td><span class="status {activity_class}">{activity}</span></td>
                 <td>{rx_text}</td>
                 <td>{tx_text}</td>
-                <td>{item.get("connections_count", 0)}</td>
+                <td>{connections_text}</td>
                 <td>{idle_text}</td>
             </tr>
             """

@@ -1,0 +1,84 @@
+{
+    "summary": {
+        "total": 3,
+        "running": 3,
+        "stopped": 0,
+        "active": 0,
+        "inactive": 3
+    },
+    "containers": [
+        {
+            "id": "3cba31a2075d640b5fd48bcbd765f0c4a817888286f7c917434925866a3e604a",
+            "name": "profiler-redis",
+            "status": "running",
+            "pid": 1608,
+            "rx_bytes": 9686,
+            "tx_bytes": 5748,
+            "image": "redis:latest",
+            "created": "2026-11-13T22:01:42.368330628Z",
+            "ips": [
+                "172.18.0.2"
+            ],
+            "published_ports": {
+                "6379/tcp": [
+                    {
+                        "HostIp": "0.0.0.0",
+                        "HostPort": "6380"
+                    },
+                    {
+                        "HostIp": "::",
+                        "HostPort": "6380"
+                    }
+                ]
+            },
+            "connections_count": null,
+            "activity": "INACTIVE",
+            "idle_seconds": 91
+        },
+        {
+            "id": "d03bdd31240a63a81b9afeb312585dbf653607d74cbfa54c97200122d87fa73e",
+            "name": "profiler-idle",
+            "status": "running",
+            "pid": 1696,
+            "rx_bytes": 1748,
+            "tx_bytes": 126,
+            "image": "alpine:latest",
+            "created": "2026-11-13T22:01:42.36698042Z",
+            "ips": [
+                "172.18.0.3"
+            ],
+            "published_ports": {},
+            "connections_count": null,
+            "activity": "INACTIVE",
+            "idle_seconds": 91
+        },
+        {
+            "id": "4f9004e6c5e477be5ca99b3875c2f83b2c68b108b0a5250c791cdb3f9166ba98",
+            "name": "profiler-nginx",
+            "status": "running",
+            "pid": 1021,
+            "rx_bytes": 23136,
+            "tx_bytes": 59090,
+            "image": "nginx:latest",
+            "created": "2026-11-13T18:57:21.182471675Z",
+            "ips": [
+                "172.17.0.2"
+            ],
+            "published_ports": {
+                "80/tcp": [
+                    {
+                        "HostIp": "0.0.0.0",
+                        "HostPort": "8080"
+                    },
+                    {
+                        "HostIp": "::",
+                        "HostPort": "8080"
+                    }
+                ]
+            },
+            "connections_count": null,
+            "activity": "INACTIVE",
+            "idle_seconds": 91
+        }
+    ]
+}

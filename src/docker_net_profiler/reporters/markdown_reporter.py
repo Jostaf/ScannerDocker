@@ -49,14 +49,15 @@ def save_markdown_report(results, output_path="report.md"):
         activity = str(item["activity"])
         rx = item.get("rx_bytes")
         tx = item.get("tx_bytes")
-        connections = item.get("connections_count", 0)
+        connections = item.get("connections_count")
+        connections_text = str(connections) if connections is not None else "-"
 
         rx_text = str(rx) if rx is not None else "-"
         tx_text = str(tx) if tx is not None else "-"
 
         lines.append(
             f"| {name} | {status} | {activity} | "
-            f"{rx_text} | {tx_text} | {connections} | {idle_text} |"
+            f"{rx_text} | {tx_text} | {connections_text} | {idle_text} |"
         )
 
     lines.append("")
