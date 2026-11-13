@@ -4,12 +4,19 @@ import logging
 import time
 import docker
 
-from docker_monitor import create_docker_client, collect_containers
-from network_monitor import get_network_connections, get_process_pids
-from filter import filter_connections
-from analyzer import ActivityAnalyzer
-from report import print_report
+from docker_net_profiler.collectors.container_collector import (
+    create_docker_client,
+    collect_containers
+)
 
+from docker_net_profiler.collectors.network_collector import (
+    get_network_connections,
+    get_process_pids
+)
+
+from docker_net_profiler.filters import filter_connections
+from docker_net_profiler.analyzer import ActivityAnalyzer
+from docker_net_profiler.reporters.console_reporter import print_report
 
 def parse_arguments():
     parser = argparse.ArgumentParser(
