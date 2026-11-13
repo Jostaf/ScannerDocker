@@ -1,34 +1,113 @@
 
-import docker
+import argparse
 import logging
+import time
+import docker
+
+from docker_monitor import create_docker_client, collect_containers
+from network_monitor import get_network_connections, get_process_pids
+from filter import filter_connections
+from analyzer import ActivityAnalyzer
 from report import print_report
 
+
+def parse_arguments():
+    parser = argparse.ArgumentParser(
+        description="Docker container activity monitor"
+    )
+
+    parser.add_argument(
+        "--interval",
+        type=int,
+        default=10,
+        help="Monitoring interval in seconds"
+    )
+
+    parser.add_argument(
+        "--idle-timeout",
+        type=int,
+        default=30,
+        help="Inactivity timeout in minutes"
+    )
+
+    parser.add_argument(
+        "--once",
+        action="store_true",
+        help="Run monitoring only once"
+    )
+
+    args = parser.parse_args()
+
+    if args.interval <= 0 or args.idle_timeout <= 0:
+        parser.error("Interval and idle-timeout must be positive")
+
+    return args
+
+
 def main():
+
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(message)s"
     )
 
+    args = parse_arguments()
+
     logging.info("Starting Docker Monitor...")
 
-    try:
-        client = docker.from_env()
+    client = None
 
-        # Проверяем подключение к Docker
-        client.ping()
+    try:
+        client = create_docker_client()
 
         logging.info("Successfully connected to Docker")
 
-        # Получаем все контейнеры, включая остановленные
-        containers = client.containers.list(all=True)
+        analyzer = ActivityAnalyzer(
+            idle_timeout=args.idle_timeout * 60
+        )
 
-        print_report(containers)
+        while True:
+
+            containers = collect_containers(client)
+
+            connections = get_network_connections()
+
+            for container in containers:
+
+                if container["status"] != "running":
+                    container["connections_count"] = 0
+                    continue
+
+                pids = get_process_pids(container["pid"])
+
+                filtered = filter_connections(
+                    connections,
+                    pids
+                )
+
+                container["connections_count"] = len(filtered)
+
+            results = analyzer.analyze(containers)
+
+            print_report(results)
+
+            if args.once:
+                break
+
+            time.sleep(args.interval)
 
     except docker.errors.DockerException as error:
-        logging.error("Docker connection error: %s", error)
+        logging.error("Docker error: %s", error)
+
+    except KeyboardInterrupt:
+        logging.info("Monitoring stopped by user")
 
     except Exception:
         logging.exception("Unexpected error occurred")
+
+    finally:
+        if client is not None:
+            client.close()
 
 
 if __name__ == "__main__":
