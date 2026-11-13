@@ -11,12 +11,18 @@ from docker_net_profiler.collectors.container_collector import (
 
 from docker_net_profiler.collectors.network_collector import (
     get_network_connections,
-    get_process_pids
+    get_process_pids,
+    supports_host_pid_matching
 )
 
 from docker_net_profiler.filters import filter_connections
 from docker_net_profiler.analyzer import ActivityAnalyzer
+
 from docker_net_profiler.reporters.console_reporter import print_report
+from docker_net_profiler.reporters.json_reporter import save_json_report
+from docker_net_profiler.reporters.markdown_reporter import save_markdown_report
+from docker_net_profiler.reporters.html_reporter import save_html_report
+
 
 def parse_arguments():
     parser = argparse.ArgumentParser(
@@ -43,10 +49,25 @@ def parse_arguments():
         help="Run monitoring only once"
     )
 
+    parser.add_argument(
+        "--format",
+        choices=["console", "json", "markdown", "html"],
+        default="console",
+        help="Report format"
+    )
+
+    parser.add_argument(
+        "--output",
+        default=None,
+        help="Output file for the report"
+    )
+
     args = parser.parse_args()
 
     if args.interval <= 0 or args.idle_timeout <= 0:
-        parser.error("Interval and idle-timeout must be positive")
+        parser.error(
+            "Interval and idle-timeout must be positive"
+        )
 
     return args
 
@@ -69,6 +90,16 @@ def main():
 
         logging.info("Successfully connected to Docker")
 
+        supports_pid_matching = supports_host_pid_matching(client)
+
+        if supports_pid_matching:
+            logging.info("Host PID matching is available")
+        else:
+            logging.info(
+                "Host PID matching is unavailable. "
+                "Connection count will be reported as unknown."
+            )
+
         analyzer = ActivityAnalyzer(
             idle_timeout=args.idle_timeout * 60
         )
@@ -77,7 +108,10 @@ def main():
 
             containers = collect_containers(client)
 
-            connections = get_network_connections()
+            if supports_pid_matching:
+                connections = get_network_connections()
+            else:
+                connections = None
 
             for container in containers:
 
@@ -85,7 +119,15 @@ def main():
                     container["connections_count"] = 0
                     continue
 
+                if connections is None:
+                    container["connections_count"] = None
+                    continue
+
                 pids = get_process_pids(container["pid"])
+
+                if not pids:
+                    container["connections_count"] = None
+                    continue
 
                 filtered = filter_connections(
                     connections,
@@ -96,7 +138,27 @@ def main():
 
             results = analyzer.analyze(containers)
 
-            print_report(results)
+            if args.format == "console":
+                print_report(results)
+
+            elif args.format == "json":
+                save_json_report(
+                    results,
+                    args.output or "report.json"
+                )
+
+            elif args.format == "markdown":
+                save_markdown_report(
+                    results,
+                    args.output or "report.md"
+                )
+
+            elif args.format == "html":
+                save_html_report(
+                    results,
+                    args.output or "report.html",
+                    refresh_seconds=None if args.once else args.interval
+                )
 
             if args.once:
                 break

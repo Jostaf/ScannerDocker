@@ -2,11 +2,11 @@
 import psutil
 import socket
 import logging
+import sys
 
 
 def format_address(address):
     """Преобразует сетевой адрес в строку."""
-
     if not address:
         return None
 
@@ -16,8 +16,39 @@ def format_address(address):
     return f"{address[0]}:{address[1]}"
 
 
+def supports_host_pid_matching(client):
+    """
+    Проверяет, можно ли сопоставлять PID контейнеров
+    с процессами хостовой системы.
+    """
+
+    # На macOS и Windows Docker Desktop использует
+    # отдельную Linux-среду для контейнеров.
+    if sys.platform != "linux":
+        return False
+
+    try:
+        docker_info = client.info()
+    except Exception as error:
+        logging.warning(
+            "Cannot determine Docker environment: %s",
+            error
+        )
+        return False
+
+    operating_system = docker_info.get(
+        "OperatingSystem", ""
+    ).lower()
+
+    # Не используем PID-сопоставление для Docker Desktop.
+    if "docker desktop" in operating_system:
+        return False
+
+    return True
+
+
 def get_network_connections():
-    """Получает сетевые соединения хоста."""
+    """Получает сетевые соединения хостовой системы."""
 
     try:
         connections = psutil.net_connections(kind="inet")
@@ -26,7 +57,7 @@ def get_network_connections():
         logging.warning(
             "Access denied while collecting network connections"
         )
-        return []
+        return None
 
     network_data = []
 
