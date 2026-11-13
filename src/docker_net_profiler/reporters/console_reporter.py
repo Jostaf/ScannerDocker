@@ -1,7 +1,6 @@
 
 
 def print_report(results):
-    """Выводит отчёт о состоянии Docker-контейнеров."""
 
     print("\n" + "=" * 85)
     print("                         DOCKER MONITOR")

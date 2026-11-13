@@ -4,8 +4,6 @@ from pathlib import Path
 
 
 def save_json_report(results, output_path="report.json"):
-    """Сохраняет результаты анализа контейнеров в JSON."""
-
     total = len(results)
 
     running = sum(

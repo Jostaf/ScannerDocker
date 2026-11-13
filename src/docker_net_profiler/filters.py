@@ -4,7 +4,6 @@ import psutil
 
 
 def filter_connections(connections, container_pids):
-    """Фильтрует соединения по PID и типу подключения."""
 
     filtered = []
 

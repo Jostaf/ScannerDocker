@@ -5,7 +5,6 @@ from pathlib import Path
 
 
 def save_html_report(results, output_path="report.html", refresh_seconds=None):
-    """Сохраняет результаты анализа в HTML."""
 
     total = len(results)
 

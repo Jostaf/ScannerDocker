@@ -3,7 +3,6 @@ from pathlib import Path
 
 
 def save_markdown_report(results, output_path="report.md"):
-    """Сохраняет результаты анализа контейнеров в Markdown."""
 
     total = len(results)
 

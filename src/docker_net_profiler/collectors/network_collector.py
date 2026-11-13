@@ -1,12 +1,10 @@
 
 import psutil
-import socket
 import logging
 import sys
 
 
 def format_address(address):
-    """Преобразует сетевой адрес в строку."""
     if not address:
         return None
 
@@ -17,13 +15,7 @@ def format_address(address):
 
 
 def supports_host_pid_matching(client):
-    """
-    Проверяет, можно ли сопоставлять PID контейнеров
-    с процессами хостовой системы.
-    """
 
-    # На macOS и Windows Docker Desktop использует
-    # отдельную Linux-среду для контейнеров.
     if sys.platform != "linux":
         return False
 
@@ -40,7 +32,6 @@ def supports_host_pid_matching(client):
         "OperatingSystem", ""
     ).lower()
 
-    # Не используем PID-сопоставление для Docker Desktop.
     if "docker desktop" in operating_system:
         return False
 
@@ -48,7 +39,6 @@ def supports_host_pid_matching(client):
 
 
 def get_network_connections():
-    """Получает сетевые соединения хостовой системы."""
 
     try:
         connections = psutil.net_connections(kind="inet")
@@ -74,7 +64,6 @@ def get_network_connections():
 
 
 def get_process_pids(root_pid):
-    """Получает PID основного и дочерних процессов."""
 
     if not root_pid:
         return set()

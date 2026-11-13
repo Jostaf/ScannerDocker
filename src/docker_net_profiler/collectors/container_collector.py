@@ -3,14 +3,14 @@ import docker
 
 
 def create_docker_client():
-    """Создаёт и проверяет подключение к Docker."""
+
     client = docker.from_env()
     client.ping()
     return client
 
 
 def collect_containers(client):
-    """Собирает информацию обо всех контейнерах."""
+
     containers = client.containers.list(all=True)
     result = []
 
