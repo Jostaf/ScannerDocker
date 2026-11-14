@@ -79,7 +79,7 @@ ScannerDocker/
 Клонирование репозитория:
 
 ```bash
-git clone <ССЫЛКА_НА_РЕПОЗИТОРИЙ>
+git clone https://github.com/Jostaf/ScannerDocker.git
 cd ScannerDocker
 ```
 
@@ -235,6 +235,3 @@ PYTHONPATH=src python -m unittest discover -s tests -v
 
 **Важно:** статус `INACTIVE` означает отсутствие наблюдаемых изменений сетевых счётчиков за установленный период. Это не означает, что контейнер остановлен, неисправен или неработоспособен.
 
-## Лицензия
-
-Лицензия проекта пока не указана.
