@@ -110,6 +110,7 @@ pip install -r requirements.txt
 ```
 
 ## Запуск программы
+\
 **Windows**
 
 Запуск мониторинга со стандартными настройками:
@@ -129,6 +130,7 @@ $env:PYTHONPATH="src"; python -m docker_net_profiler.cli --once
 ```bash
 $env:PYTHONPATH="src"; python -m docker_net_profiler.cli --interval 5 --idle-timeout 1
 ```
+\
 **macOS / Linux**
 
 Запуск мониторинга со стандартными настройками:
@@ -158,6 +160,8 @@ PYTHONPATH="src" python -m docker_net_profiler.cli --interval 5 --idle-timeout 1
 
 Программа поддерживает сохранение результатов в JSON, Markdown и HTML.
 
+**Windows**
+
 **JSON**
 
 ```bash
@@ -175,10 +179,30 @@ $env:PYTHONPATH="src"; python -m docker_net_profiler.cli --once --format markdow
 ```bash
 $env:PYTHONPATH="src"; python -m docker_net_profiler.cli --once --format html --output examples/report.html
 ```
+\
+**macOS / Linux**
+
+**JSON**
+
+```bash
+PYTHONPATH="src" python -m docker_net_profiler.cli --once --format json --output examples/report.json
+```
+
+**Markdown**
+
+```bash
+PYTHONPATH="src" python -m docker_net_profiler.cli --once --format markdown --output examples/report.md
+```
+
+**HTML**
+
+```bash
+PYTHONPATH="src" python -m docker_net_profiler.cli --once --format html --output examples/report.html
+```
 
 Примеры сформированных отчётов находятся в директории `examples/`.
 
-## Тестовый стенд :)
+## Тестовый стенд 
 
 Для проверки работы программы предусмотрена конфигурация Docker Compose.
 
@@ -221,11 +245,18 @@ done
 ```
 
 ## Запуск тестов
+**Windows**
 
 Для запуска модульных тестов выполни:
 
 ```bash
 $env:PYTHONPATH="src"; python -m unittest discover -s tests -v
+```
+**macOS / Linux**
+
+Для запуска модульных тестов выполни:
+```bash
+PYTHONPATH="src" python -m unittest discover -s tests -v
 ```
 
 ## Ограничения платформы
