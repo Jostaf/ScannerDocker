@@ -178,7 +178,7 @@ $env:PYTHONPATH="src"; python -m docker_net_profiler.cli --once --format html --
 
 Примеры сформированных отчётов находятся в директории `examples/`.
 
-## Тестовый стенд
+## Тестовый стенд :)
 
 Для проверки работы программы предусмотрена конфигурация Docker Compose.
 
