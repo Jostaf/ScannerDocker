@@ -110,25 +110,40 @@ pip install -r requirements.txt
 ```
 
 ## Запуск программы
+**Windows**
 
 Запуск мониторинга со стандартными настройками:
 
 ```bash
-PYTHONPATH=src python -m docker_net_profiler.cli
+$env:PYTHONPATH="src"; python -m docker_net_profiler.cli
 ```
 
 Однократный сбор информации:
 
 ```bash
-PYTHONPATH=src python -m docker_net_profiler.cli --once
+$env:PYTHONPATH="src"; python -m docker_net_profiler.cli --once
 ```
 
 Мониторинг с интервалом 5 секунд и тайм-аутом бездействия 1 минута:
 
 ```bash
-PYTHONPATH=src python -m docker_net_profiler.cli --interval 5 --idle-timeout 1
+$env:PYTHONPATH="src"; python -m docker_net_profiler.cli --interval 5 --idle-timeout 1
+```
+**macOS / Linux**
+
+Запуск мониторинга со стандартными настройками:
+```bash
+PYTHONPATH="src" python -m docker_net_profiler.cli
+```
+Однократный сбор информации:
+```bash
+PYTHONPATH="src" python -m docker_net_profiler.cli --once
 ```
 
+Мониторинг с интервалом 5 секунд и тайм-аутом бездействия 1 минута:
+```bash
+PYTHONPATH="src" python -m docker_net_profiler.cli --interval 5 --idle-timeout 1
+```
 ### Аргументы командной строки
 
 | Аргумент | Описание | Значение по умолчанию |
@@ -146,19 +161,19 @@ PYTHONPATH=src python -m docker_net_profiler.cli --interval 5 --idle-timeout 1
 **JSON**
 
 ```bash
-PYTHONPATH=src python -m docker_net_profiler.cli --once --format json --output examples/report.json
+$env:PYTHONPATH="src"; python -m docker_net_profiler.cli --once --format json --output examples/report.json
 ```
 
 **Markdown**
 
 ```bash
-PYTHONPATH=src python -m docker_net_profiler.cli --once --format markdown --output examples/report.md
+$env:PYTHONPATH="src"; python -m docker_net_profiler.cli --once --format markdown --output examples/report.md
 ```
 
 **HTML**
 
 ```bash
-PYTHONPATH=src python -m docker_net_profiler.cli --once --format html --output examples/report.html
+$env:PYTHONPATH="src"; python -m docker_net_profiler.cli --once --format html --output examples/report.html
 ```
 
 Примеры сформированных отчётов находятся в директории `examples/`.
@@ -210,7 +225,7 @@ done
 Для запуска модульных тестов выполни:
 
 ```bash
-PYTHONPATH=src python -m unittest discover -s tests -v
+$env:PYTHONPATH="src"; python -m unittest discover -s tests -v
 ```
 
 ## Ограничения платформы
