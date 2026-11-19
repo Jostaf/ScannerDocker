@@ -1,22 +1,26 @@
 """Run every stand and save example reports to examples/<stand>/.
 
 Usage:  python scripts/make_examples.py [--duration 60] [--idle-timeout 0.5]
-Needs Docker (with 'docker compose') and the package installed
-(pip install -e .). Works the same on Windows, macOS and Linux.
+Needs Docker (with 'docker compose') and `pip install -r requirements.txt`.
+Run from the project root. Works the same on Windows, macOS and Linux.
 """
 import argparse
 import contextlib
 import json
+import os
 import subprocess
 import sys
 import time
 from pathlib import Path
 
+ROOT = Path(__file__).resolve().parent.parent
+SRC = ROOT / "src"
+sys.path.insert(0, str(SRC))  # works without "pip install"
+os.environ["PYTHONPATH"] = str(SRC) + os.pathsep + os.environ.get("PYTHONPATH", "")
+
 from docker_net_profiler.reporters.console_reporter import print_report
 from docker_net_profiler.reporters.html_reporter import save_html_report
 from docker_net_profiler.reporters.markdown_reporter import save_markdown_report
-
-ROOT = Path(__file__).resolve().parent.parent
 
 def run(cmd, **kwargs):
     print("+", " ".join(map(str, cmd)))
