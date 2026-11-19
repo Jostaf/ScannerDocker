@@ -1,0 +1,10 @@
+# Stand 1: two quiet containers. Expected: both IDLE (dead).
+name: s1-basic
+services:
+  cache:
+    image: redis:7-alpine
+    container_name: s1-cache
+  sleeper:
+    image: alpine:3.20
+    container_name: s1-sleeper
+    command: ["sleep", "3600"]

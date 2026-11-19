@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "docker-net-profiler"
+version = "0.2.0"
+description = "Finds idle ('dead') Docker containers by network activity on a single host"
+requires-python = ">=3.9"
+dependencies = ["docker>=6.0", "psutil>=5.9"]
+
+[project.scripts]
+docker-net-profiler = "docker_net_profiler.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
