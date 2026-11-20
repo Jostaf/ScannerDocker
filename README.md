@@ -160,6 +160,8 @@ python -m docker_net_profiler.cli
 
 Дальше в README примеры даны для macOS / Linux. В PowerShell достаточно один раз задать `$env:PYTHONPATH = "src"` и убрать префикс `PYTHONPATH=src` из команд.
 
+macOS / Linux
+
 Однократный сбор информации:
 
 ```bash
@@ -183,6 +185,36 @@ PYTHONPATH=src python -m docker_net_profiler.cli --duration 60 --idle-timeout 0.
 ```bash
 PYTHONPATH=src python -m docker_net_profiler.cli --duration 60 --idle-timeout 0.5 --name-filter s3-
 ```
+**Windows**
+
+Запуск мониторинга со стандартными настройками:
+
+```bash
+$env:PYTHONPATH="src"; python -m docker_net_profiler.cli
+```
+
+Однократный сбор информации:
+
+```bash
+$env:PYTHONPATH="src"; python -m docker_net_profiler.cli --once
+```
+
+Мониторинг с интервалом 5 секунд и тайм-аутом бездействия 1 минута:
+
+```bash
+$env:PYTHONPATH="src"; python -m docker_net_profiler.cli --interval 5 --idle-timeout 1
+```
+Наблюдение в течение 60 секунд с одним итоговым отчётом (поиск «мёртвых» контейнеров за интервал):
+
+```bash
+$env:PYTHONPATH="src"; python -m docker_net_profiler.cli --duration 60 --idle-timeout 0.5
+```
+
+Только контейнеры, в имени которых есть заданный текст:
+
+```bash
+$env:PYTHONPATH="src"; python -m docker_net_profiler.cli --duration 60 --idle-timeout 0.5 --name-filter s3-
+```
 
 ### Аргументы командной строки
 
@@ -203,6 +235,8 @@ PYTHONPATH=src python -m docker_net_profiler.cli --duration 60 --idle-timeout 0.
 
 Программа поддерживает сохранение результатов в JSON, Markdown и HTML. Для надёжного определения `IDLE` используй `--duration`, так как в режиме `--once` времени наблюдения нет.
 
+macOS / Linux
+
 **JSON**
 
 ```bash
@@ -219,6 +253,26 @@ PYTHONPATH=src python -m docker_net_profiler.cli --duration 60 --idle-timeout 0.
 
 ```bash
 PYTHONPATH=src python -m docker_net_profiler.cli --duration 60 --idle-timeout 0.5 --format html --output examples/report.html
+```
+\
+**Windows**
+
+**JSON**
+
+```bash
+$env:PYTHONPATH="src"; python -m docker_net_profiler.cli --once --format json --output examples/report.json
+```
+
+**Markdown**
+
+```bash
+$env:PYTHONPATH="src"; python -m docker_net_profiler.cli --once --format markdown --output examples/report.md
+```
+
+**HTML**
+
+```bash
+$env:PYTHONPATH="src"; python -m docker_net_profiler.cli --once --format html --output examples/report.html
 ```
 
 Примеры сформированных отчётов по тестовым стендам находятся в директории `examples/`.
@@ -296,6 +350,13 @@ for i in {1..20}; do
     sleep 1
 done
 ```
+Пример генерации запросов к Nginx (Windows):
+```bash
+for ($i = 1; $i -le 20; $i++) {
+    curl.exe -s http://localhost:8080/ | Out-Null
+    Start-Sleep -Seconds 1
+}
+```
 
 ### Стенды для примеров отчётов
 
@@ -309,10 +370,18 @@ done
 
 Запуск одного стенда вручную:
 
+macOS / Linux
+
 ```bash
 docker compose -f stands/stand3-mixed/docker-compose.yml up -d
 PYTHONPATH=src python -m docker_net_profiler.cli --name-filter s3- --duration 60 --idle-timeout 0.5
 docker compose -f stands/stand3-mixed/docker-compose.yml down
+```
+Windows
+```bash
+docker compose -f stands/stand3-mixed/docker-compose.yml up -d
+$env:PYTHONPATH="src"; python -m docker_net_profiler.cli --name-filter s3- --duration 60 --idle-timeout 0.5
+docker compose -f stands/stand3-mixed/docker-compose.yml
 ```
 
 ### Автоматическое формирование примеров
@@ -327,8 +396,14 @@ python scripts/make_examples.py
 
 Для запуска модульных тестов выполни:
 
+macOS / Linux
+
 ```bash
 PYTHONPATH=src python -m unittest discover -s src -t src -v
+```
+Windows:
+```bash
+$env:PYTHONPATH="src"; python -m unittest discover -s tests -v
 ```
 
 ## Необязательно: установка как команды
